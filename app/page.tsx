@@ -13,37 +13,33 @@ export default function Home() {
   const minutes = Math.floor((time % 360000) / 6000);
   const seconds = Math.floor((time % 6000) / 100);
   const milliseconds = time % 100;
-
-  useEffect(() => {
-    let intervalId
-    if(isRunning) {
-      intervalId = setInterval(() => {
-        setTime(time => time + 1);
-      }, 10);
-    }
-    return () => clearInterval(intervalId);
-  }, [isRunning]);
-
   const currentDate = new Date().toLocaleDateString();
   // const currentTime = new Date().toLocaleTimeString();
 
-  function handleStartStop() {
-    // When i stop i want to record times and save
-    setTimeEntry({...timeEntry, end: new Date().toLocaleTimeString(), durationHours: hours, durationMinutes: minutes})
-    setTimeEntries(timeEntries => [...timeEntries, timeEntry])
+  useEffect(() => {
+    let intervalId
 
-    // when i start i want to reset the time and 
-
-    console.log(timeEntry)
-    // Reset before new run
-    if(!isRunning) {
-      setTime(0)
-    } else {
-      console.log(hours)
-      console.log(minutes)
+    if(isRunning) {
       setTimeEntry({...timeEntry, start: new Date().toLocaleTimeString()})
+      setTime(0)
+      intervalId = setInterval(() => {
+        setTime(time => time + 1);
+      }, 10);
+    } else {
+      if (timeEntry.start) {
+        timeEntry.end = new Date().toLocaleTimeString()
+        timeEntry.durationHours = hours
+        timeEntry.durationMinutes = minutes
+        
+        setTimeEntries([...timeEntries, timeEntry])
+      }
     }
+    
+    return () => clearInterval(intervalId);
+  }, [isRunning]);
 
+
+  function handleStartStop() {
     setIsRunning(isRunning => !isRunning)
   }
 
