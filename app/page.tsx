@@ -81,7 +81,7 @@ export default function Home() {
           Submit
         </button>
       </div>
-      <div className="text-3xl mb-5">{hours}-{minutes}-{seconds}-{milliseconds}</div>
+      <div className="text-3xl mb-5">{hours}.{minutes}.{seconds}.{milliseconds}</div>
       <table className="border border-collapse">
         <thead>
           <tr>
